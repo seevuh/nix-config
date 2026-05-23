@@ -1,7 +1,7 @@
 { config, pkgs, user, inputs, ... }:
 
 {
-  # Enable Lix
+  #region Enable Lix
   nixpkgs.overlays = [ (final: prev: {
     inherit (prev.lixPackageSets.stable)
       nixpkgs-review
@@ -11,6 +11,7 @@
   }) ];
 
   nix.package = pkgs.lixPackageSets.stable.lix;
+  #endregion
 
   imports =
     [ # Include the results of the hardware scan.
@@ -28,9 +29,6 @@
 
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
 
   # Networking
   networking = {
@@ -91,24 +89,9 @@
 
   # Disable GNOME application suite
   services.gnome.core-apps.enable = false;
-  services.gnome.core-developer-tools.enable = false;
+  services.gnome.core-developer-tools.enable = true;
   services.gnome.games.enable = false;
   environment.gnome.excludePackages = with pkgs; [ gnome-tour gnome-user-docs ];
-
-  programs.dconf.profiles.user.databases = [
-    {
-      settings = {
-        "org/gnome/mutter" = {
-          experimental-features = [
-            "scale-monitor-framebuffer" # Enables fractional scaling (125% 150% 175%)
-            "variable-refresh-rate" # Enables Variable Refresh Rate (VRR) on compatible displays
-            "xwayland-native-scaling" # Scales Xwayland applications to look crisp on HiDPI screens
-            "autoclose-xwayland" # automatically terminates Xwayland if all relevant X11 clients are gone      
-          ];
-        };
-      };
-    }
-  ];
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -127,13 +110,10 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
+
+  # Enable VSCode Server
+  programs.nix-ld.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
@@ -173,6 +153,7 @@
     description = "sea vuh";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
+    # gnomeExtensions.gjs-osk
     #  thunderbird
     ];
   };
@@ -181,14 +162,6 @@
   security = {
     sudo.wheelNeedsPassword = false;
   };
-
-  # Install firefox.
-  programs.firefox.enable = true;
-
-  # Enable VSCode Server
-  programs.nix-ld.enable = true;
-
-
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -223,18 +196,5 @@
     randomizedDelaySec = "45min";
   };
 
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "25.11"; # Did you read the comment?
 }

@@ -9,9 +9,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
-  outputs = inputs @ { self, nixpkgs, home-manager }:
+  outputs = inputs @ { self, nixpkgs, home-manager, nur}:
     let
       system = "x86_64-linux";
       user = "seavuh";
@@ -29,7 +34,7 @@
           specialArgs = { inherit user inputs; };
           modules = [
             ./configuration.nix
-
+            {nixpkgs.overlays = [inputs.nur.overlays.default];}
             home-manager.nixosModules.home-manager  {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
