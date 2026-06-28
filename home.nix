@@ -191,6 +191,7 @@
           "telemetry.telemetryLevel" = "off";
           "workbench.colorTheme" = "Monokai Pro (Filter Spectrum)";
           "workbench.iconTheme" = "vscode-icons";
+          "git.confirmSync" = false;
         };
       };
     };
