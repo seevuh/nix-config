@@ -75,6 +75,14 @@
         # When enabled other devices can connect faster to us, however
         # the tradeoff is increased power consumption. Defaults to 'false'.
         Experimental = true;
+        # Forces BR/EDR mode to prevent crashes and dropouts with AirPods/Apple peripherals
+        ControllerMode = "bredr";
+        # Disable autosuspend on the Bluetooth controller to prevent input dropouts
+        JustWorksRepairing = "always";
+      };
+      Input = {
+        # Allows userspace to handle HID devices (fixes unresponsive Apple Magic Trackpads)
+        UserspaceHID = true;
       };
       Policy = {
         # Enable all controllers when they are found. This includes
@@ -188,6 +196,12 @@
       disableWhileTyping = true; # Prevents jumping cursor when typing
       clickMethod = "clickfinger"; # Two-finger click for right-click, three-finger for middle-click
       tapping = true; # Tap-to-click
+      # Optional: Adjust scrolling or acceleration if the trackpad is still jumpy
+      scrollMethod = "twofinger";
+
+      tappingDragLock = false; # Can cause jumpy behavior when dragging items
+      accelProfile = "flat"; # Disables Wayland/libinput mouse acceleration for a 1:1 Mac feel
+
     };
   };
 
