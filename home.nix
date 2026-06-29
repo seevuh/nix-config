@@ -135,6 +135,7 @@
     shellAliases = {
       ll = "ls -l";
       nix-switch = "sudo nixos-rebuild switch --flake .";
+      nix-test = "sudo nixos-rebuild test --flake .";
     };
   };
 
