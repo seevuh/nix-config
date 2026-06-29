@@ -176,6 +176,7 @@
         "git.confirmSync" = false;
         "editor.formatOnSave" = true;
         "git.autofetch" = true;
+        "editor.minimap.enabled" = false;
       };
     };
   };
