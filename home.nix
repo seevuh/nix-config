@@ -222,6 +222,7 @@
           "workbench.iconTheme" = "vscode-icons";
           "git.confirmSync" = false;
           "editor.formatOnSave" = true;
+          "git.autofetch" = true;
         };
       };
     };
