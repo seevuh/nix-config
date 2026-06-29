@@ -152,6 +152,9 @@
   services.gnome.core-apps.enable = false;
   services.gnome.core-developer-tools.enable = false;
   services.gnome.games.enable = false;
+
+  # Disable Xterm from your system
+  services.xserver.excludePackages = with pkgs; [ xterm ];
   environment.gnome.excludePackages = with pkgs; [
     gnome-tour
     gnome-user-docs
@@ -228,6 +231,14 @@
     neovim
     nixfmt # Nix - Official RFC-style formatter (Recommended)
   ];
+
+  # Set Alacritty as the default terminal
+  xdg.terminal-exec = {
+    enable = true;
+    settings = {
+      default = [ "alacritty.desktop" ];
+    };
+  };
 
   # Enable Auto Garbage Collect
   nix.gc = {
