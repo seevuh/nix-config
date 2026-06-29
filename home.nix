@@ -17,9 +17,21 @@
   home.packages = with pkgs; [
     # gnome core apps
     gnome-software # software store
+    gnome-clocks # clock
+    nautilus # File Manager
+    gnome-tweaks # Advanced Customization Tool
+    gnome-calculator # Calculator
+    gnome-system-monitor # system monitor
+    gnome-disk-utility # Udisks UI
+    baobab # disk usage
+    gnome-font-viewer # font viewer
+    gnome-logs # logs viewer
+    gnome-text-editor # text editor
+    loupe # image viewer
+    papers # document viewer
 
     # gnome extensions
-    # gnomeExtensions.gjs-osk
+    gnomeExtensions.gjs-osk
     gnomeExtensions.forge
     gnomeExtensions.blur-my-shell
     gnomeExtensions.vitals
@@ -27,8 +39,6 @@
     # terminal
     nvtopPackages.intel
 
-    # browsers
-    brave
   ];
 
   # GNOME Desktop Configuration
@@ -39,10 +49,21 @@
       # Auto enable gnome extensions
       "org/gnome/shell" = {
         enabled-extensions = [
+          "gjsosk@vishram1123.com"
           "forge@jmmaranan.com"
           "blur-my-shell@aunetx"
           "Vitals@CoreCoding.com"
         ];
+      };
+
+      # Appearance
+      "org/gnome/desktop/interface" = {
+        color-scheme = "prefer-dark";
+      };
+
+      # touchpad scrolling
+      "org/gnome/desktop/peripherals/touchpad" = {
+        natural-scroll = false;
       };
 
     };
@@ -95,7 +116,7 @@
       profiles = {
         personal = {
           id = 0;
-          name = "Personal";
+          name = "personal";
           isDefault = true;
 
           settings = {
@@ -110,6 +131,14 @@
 
             # Disable av1 support
             "media.av1.enabled" = false;
+
+            # Optional: Hide the PiP toggle button from playing videos
+            "media.videocontrols.picture-in-picture.video-toggle.enabled" = false;
+            # Keep PiP playing when switching tabs
+            "media.videocontrols.picture-in-picture.enable-when-switching-tabs.enabled" = true;
+            # (Optional) Auto-open PiP automatically when switching tabs
+            # Note: This experimental feature has moved between Firefox Labs and default based on your Firefox version
+            "media.videocontrols.picture-in-picture.auto-open.enabled" = true;
           };
         };
       };
@@ -192,6 +221,7 @@
           "workbench.colorTheme" = "Monokai Pro (Filter Spectrum)";
           "workbench.iconTheme" = "vscode-icons";
           "git.confirmSync" = false;
+          "editor.formatOnSave" = true;
         };
       };
     };
@@ -199,12 +229,14 @@
     #git
     git = {
       enable = true;
-      userName = "seavuh";
-      userEmail = "sea@vuh.com";
+      settings = {
+        # Optional: useful for setting default branch or other global configs
+        int.defaultBranch = "main";
 
-      # Optional: useful for setting default branch or other global configs
-      extraConfig = {
-        init.defaultBranch = "main";
+        user = {
+          name = "${user}";
+          email = "${user}@git.com";
+        };
       };
     };
 

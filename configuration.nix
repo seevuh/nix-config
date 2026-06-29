@@ -12,7 +12,7 @@
 
 {
 
-  ## Enable Lix
+  # Enable Lix
   nixpkgs.overlays = [
     (final: prev: {
       inherit (prev.lixPackageSets.stable)
@@ -89,7 +89,39 @@
   networking.hostName = "nixos";
 
   # Enable networking
-  networking.networkmanager.enable = true;
+  networking = {
+
+    networkmanager.enable = false; # Enabling WPA instead
+
+    # static ip
+    interfaces.wlo1 = {
+      ipv4.addresses = [
+        {
+          address = "192.168.1.50";
+          prefixLength = 24;
+        }
+      ];
+    };
+
+    defaultGateway = {
+      address = "192.168.1.1";
+      interface = "wlo1";
+    };
+
+    nameservers = [
+      "1.1.1.1"
+      "8.8.8.8"
+    ];
+
+    wireless = {
+      enable = true; # Enables wireless support via wpa_supplicant
+      networks = {
+        "Vybe_Nest Co Space_5B_5G" = {
+          pskRaw = "a0717ae84e962d2a15d56a930d4262ed07b4b66c92ae381ce7bd0703b22b1b00";
+        };
+      };
+    };
+  };
 
   # Set your time zone.
   time.timeZone = "Asia/Kolkata";
@@ -117,7 +149,7 @@
   services.desktopManager.gnome.enable = true;
 
   ## Disable GNOME application suite
-  services.gnome.core-apps.enable = true;
+  services.gnome.core-apps.enable = false;
   services.gnome.core-developer-tools.enable = false;
   services.gnome.games.enable = false;
   environment.gnome.excludePackages = with pkgs; [
@@ -142,12 +174,6 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
 
   # Enable touchpad support
@@ -162,10 +188,9 @@
     };
   };
 
-  ## Enable Flatpak service
+  # Enable Flatpak service
   services.flatpak.enable = true;
-
-  ## Automatically add Flathub repository
+  # Automatically add Flathub repository
   systemd.services.flatpak-repo = {
     wantedBy = [ "multi-user.target" ];
     path = [ pkgs.flatpak ];
@@ -177,7 +202,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${user} = {
     isNormalUser = true;
-    description = "seevuh";
+    description = "${user}";
     extraGroups = [
       "networkmanager"
       "wheel"
@@ -189,11 +214,8 @@
     ];
   };
 
-  ## SUDO no password
+  # SUDO no password
   security.sudo.wheelNeedsPassword = false;
-
-  ## Enable Git system-wide
-  programs.git.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -202,21 +224,22 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     librewolf
+    alacritty # Terminal
     neovim
     nixfmt # Nix - Official RFC-style formatter (Recommended)
   ];
 
-  ## Enable Auto Garbage Collect
+  # Enable Auto Garbage Collect
   nix.gc = {
     automatic = true;
     dates = "weekly";
     options = "--delete-older-than 7d";
   };
 
-  ## Optimize store
+  # Optimize store
   nix.settings.auto-optimise-store = true;
 
-  ## Enable flakes
+  # Enable flakes
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
@@ -235,31 +258,14 @@
     randomizedDelaySec = "45min";
   };
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
   # List services that you want to enable:
+
+  # Enable Git system-wide
+  programs.git.enable = true;
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "26.05"; # Did you read the comment?
 
 }

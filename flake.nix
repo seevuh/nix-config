@@ -1,5 +1,5 @@
 {
-  description = "seavuh's flake";
+  description = "seevuh's flake";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -19,7 +19,7 @@
     }:
     let
       system = "x86_64-linux";
-      user = "seavuh";
+      user = "seevuh";
 
       pkgs = import nixpkgs {
         inherit system;
