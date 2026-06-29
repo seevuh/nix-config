@@ -196,12 +196,9 @@
       disableWhileTyping = true; # Prevents jumping cursor when typing
       clickMethod = "clickfinger"; # Two-finger click for right-click, three-finger for middle-click
       tapping = true; # Tap-to-click
-      # Optional: Adjust scrolling or acceleration if the trackpad is still jumpy
-      scrollMethod = "twofinger";
-
+      scrollMethod = "twofinger"; # Optional: Adjust scrolling or acceleration if the trackpad is still jumpy
       tappingDragLock = false; # Can cause jumpy behavior when dragging items
       accelProfile = "flat"; # Disables Wayland/libinput mouse acceleration for a 1:1 Mac feel
-
     };
   };
 
