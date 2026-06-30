@@ -44,7 +44,8 @@
     nvtopPackages.intel
 
     # utilities
-    obsidian
+    obsidian # markdown note-taking app
+    speedtest-cli # okla speed test
 
     # shell fix
     nix-your-shell
@@ -237,7 +238,7 @@
       # Declarative extensions from nixpkgs
       extensions = with pkgs.vscode-extensions; [
         bbenoist.nix
-        arrterian.nix-env-selector
+        # arrterian.nix-env-selector
         dracula-theme.theme-dracula
         jnoortheen.nix-ide
         vscode-icons-team.vscode-icons
