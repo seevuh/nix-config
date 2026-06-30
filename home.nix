@@ -198,18 +198,7 @@
       };
       font = {
         size = 12.0;
-        normal = {
-          family = "JetBrainsMono Nerd Font";
-          style = "Regular";
-        };
-        bold = {
-          family = "JetBrainsMono Nerd Font";
-          style = "Bold";
-        };
-        italic = {
-          family = "JetBrainsMono Nerd Font";
-          style = "Italic";
-        };
+        normal.family = "JetBrainsMono Nerd Font";
       };
       colors = {
         primary = {
@@ -265,24 +254,29 @@
         "editor.fontFamily" = "'JetBrainsMono Nerd Font', 'DejaVu Sans Mono', monospace";
         "editor.fontLigatures" = true;
         "editor.fontSize" = 14;
-        "terminal.integrated.fontFamily" = "'JetBrainsMono Nerd Font', 'DejaVu Sans Mono', monospace";
-        "nix.enableLanguageServer" = true;
+        # "nix.enableLanguageServer" = true; # system wide nix language server 'nixfmt' is already installed
       };
     };
   };
-  # Copy VS Code settings to the user's home directory
-  home.activation.copyVscodeSettings = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    mkdir -p ~/.config/Code/User
-    cp -f ${
-      pkgs.writeText "settings.json" (
-        builtins.toJSON {
-          "editor.fontSize" = 14;
-          # ... other settings
+  # Copy VS Code settings to the user's home directory and make it writable
+  home.activation.makeVSCodeConfigWritable =
+    let
+      configDirName =
+        {
+          "vscode" = "Code";
+          "vscode-insiders" = "Code - Insiders";
+          "vscodium" = "VSCodium";
         }
-      )
-    } ~/.config/Code/User/settings.json
-    chmod +w ~/.config/Code/User/settings.json
-  '';
+        .${config.programs.vscode.package.pname};
+      configPath = "${config.xdg.configHome}/${configDirName}/User/settings.json";
+    in
+    {
+      after = [ "writeBoundary" ];
+      before = [ ];
+      data = ''
+        install -m 0640 "$(readlink ${configPath})" ${configPath}
+      '';
+    };
 
   #git
   programs.git = {
