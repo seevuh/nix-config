@@ -259,41 +259,8 @@
         jnoortheen.nix-ide
         vscode-icons-team.vscode-icons
       ];
-
-      userSettings = {
-        "telemetry.telemetryLevel" = "off";
-        "workbench.colorTheme" = "Monokai Pro (Filter Spectrum)";
-        "workbench.iconTheme" = "vscode-icons";
-        "git.confirmSync" = false;
-        "editor.formatOnSave" = true;
-        "git.autofetch" = true;
-        "editor.minimap.enabled" = false;
-        "editor.fontFamily" = "'JetBrainsMono Nerd Font', 'DejaVu Sans Mono', monospace";
-        "editor.fontLigatures" = true;
-        "editor.fontSize" = 14;
-        # "nix.enableLanguageServer" = true; # system wide nix language server 'nixfmt' is already installed
-      };
     };
   };
-  # Copy VS Code settings to the user's home directory and make it writable
-  # home.activation.makeVSCodeConfigWritable =
-  #   let
-  #     configDirName =
-  #       {
-  #         "vscode" = "Code";
-  #         "vscode-insiders" = "Code - Insiders";
-  #         "vscodium" = "VSCodium";
-  #       }
-  #       .${config.programs.vscode.package.pname};
-  #     configPath = "${config.xdg.configHome}/${configDirName}/User/settings.json";
-  #   in
-  #   {
-  #     after = [ "writeBoundary" ];
-  #     before = [ ];
-  #     data = ''
-  #       install -m 0640 "$(readlink ${configPath})" ${configPath}
-  #     '';
-  #   };
 
   #git
   programs.git = {
