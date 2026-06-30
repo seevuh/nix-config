@@ -123,6 +123,22 @@
     };
   };
 
+  # nix-my-shell
+  programs.nix-your-shell = {
+    enable = true;
+
+    # Optional: Enable for selected shells. Default: `home.shell.enable<Shell>Integration`.
+    # enableFishIntegration = true;
+    enableNushellIntegration = true;
+    enableZshIntegration = true;
+
+    # Optional: Whether to pipe the build output through nix-output-monitor. Default: false.
+    # nix-output-monitor.enable = true;
+  };
+  # generate the nix-your-shell.nu file
+  home.file."${config.xdg.configHome}/nushell/nix-your-shell.nu".source =
+    pkgs.nix-your-shell.generate-config "nu";
+
   # Nushell Configuration
   programs.nushell = {
     enable = true;
@@ -260,24 +276,24 @@
     };
   };
   # Copy VS Code settings to the user's home directory and make it writable
-  home.activation.makeVSCodeConfigWritable =
-    let
-      configDirName =
-        {
-          "vscode" = "Code";
-          "vscode-insiders" = "Code - Insiders";
-          "vscodium" = "VSCodium";
-        }
-        .${config.programs.vscode.package.pname};
-      configPath = "${config.xdg.configHome}/${configDirName}/User/settings.json";
-    in
-    {
-      after = [ "writeBoundary" ];
-      before = [ ];
-      data = ''
-        install -m 0640 "$(readlink ${configPath})" ${configPath}
-      '';
-    };
+  # home.activation.makeVSCodeConfigWritable =
+  #   let
+  #     configDirName =
+  #       {
+  #         "vscode" = "Code";
+  #         "vscode-insiders" = "Code - Insiders";
+  #         "vscodium" = "VSCodium";
+  #       }
+  #       .${config.programs.vscode.package.pname};
+  #     configPath = "${config.xdg.configHome}/${configDirName}/User/settings.json";
+  #   in
+  #   {
+  #     after = [ "writeBoundary" ];
+  #     before = [ ];
+  #     data = ''
+  #       install -m 0640 "$(readlink ${configPath})" ${configPath}
+  #     '';
+  #   };
 
   #git
   programs.git = {
