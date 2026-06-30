@@ -39,6 +39,9 @@
     # terminal
     nvtopPackages.intel
 
+    # utilities
+    obsidian
+
   ];
 
   # GNOME Desktop Configuration
