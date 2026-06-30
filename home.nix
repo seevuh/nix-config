@@ -2,6 +2,7 @@
   config,
   pkgs,
   user,
+  lib,
   ...
 }:
 
@@ -11,6 +12,9 @@
   home.username = "${user}";
   home.homeDirectory = "/home/${user}";
   home.stateVersion = "26.05"; # Please read the comment before changing.
+
+  # Enable fontconfig to manage fonts and improve font rendering
+  fonts.fontconfig.enable = true;
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
@@ -41,6 +45,12 @@
 
     # utilities
     obsidian
+
+    # shell fix
+    nix-your-shell
+
+    #fonts
+    nerd-fonts.jetbrains-mono
 
   ];
 
@@ -137,23 +147,94 @@
     # Define shell aliases
     shellAliases = {
       ll = "ls -l";
+      la = "ls -a";
       nix-switch = "sudo nixos-rebuild switch --flake .";
       nix-test = "sudo nixos-rebuild test --flake .";
     };
   };
 
   # Workaround: Use Bash as the login shell and automatically launch Nushell
-  programs.bash = {
+  # programs.bash = {
+  #   enable = true;
+  #   initExtra = ''
+  #     if [[ $- == *i* ]] && [[ -z "$TMUX" ]]; then
+  #       exec nu
+  #     fi
+  #   '';
+  # };
+
+  programs.zsh = {
     enable = true;
-    initExtra = ''
-      if [[ $- == *i* ]] && [[ -z "$TMUX" ]]; then
-        exec nu
-      fi
-    '';
+    enableCompletion = true;
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
+    oh-my-zsh = {
+      enable = true;
+      plugins = [
+        "git"
+        "sudo"
+      ];
+      theme = "robbyrussell";
+    };
+    shellAliases = {
+      ll = "ls -l";
+      la = "ls -a";
+      nix-switch = "sudo nixos-rebuild switch --flake .";
+      nix-test = "sudo nixos-rebuild test --flake .";
+    };
+    history.size = 10000;
+  };
+
+  programs.alacritty = {
+    enable = true;
+    settings = {
+      window = {
+        padding = {
+          x = 10;
+          y = 10;
+        };
+        decorations = "full";
+        opacity = 0.9;
+      };
+      font = {
+        size = 12.0;
+        normal = {
+          family = "JetBrainsMono Nerd Font";
+          style = "Regular";
+        };
+        bold = {
+          family = "JetBrainsMono Nerd Font";
+          style = "Bold";
+        };
+        italic = {
+          family = "JetBrainsMono Nerd Font";
+          style = "Italic";
+        };
+      };
+      colors = {
+        primary = {
+          background = "0x1e1e2e";
+          foreground = "0xcdd6f4";
+        };
+      };
+    };
+  };
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+    settings = {
+      add_newline = false;
+      character = {
+        success_symbol = "[➜](bold green)";
+        error_symbol = "[➜](bold red)";
+      };
+      nix_shell = {
+        format = "[$symbol(\\($name\\))]($style) ";
+      };
+    };
   };
 
   # Example integration for a great prompt and auto-suggestions
-  programs.starship.enable = true;
   programs.carapace = {
     enable = true;
     enableNushellIntegration = true;
@@ -167,6 +248,7 @@
       # Declarative extensions from nixpkgs
       extensions = with pkgs.vscode-extensions; [
         bbenoist.nix
+        arrterian.nix-env-selector
         dracula-theme.theme-dracula
         jnoortheen.nix-ide
         vscode-icons-team.vscode-icons
@@ -180,9 +262,27 @@
         "editor.formatOnSave" = true;
         "git.autofetch" = true;
         "editor.minimap.enabled" = false;
+        "editor.fontFamily" = "'JetBrainsMono Nerd Font', 'DejaVu Sans Mono', monospace";
+        "editor.fontLigatures" = true;
+        "editor.fontSize" = 14;
+        "terminal.integrated.fontFamily" = "'JetBrainsMono Nerd Font', 'DejaVu Sans Mono', monospace";
+        "nix.enableLanguageServer" = true;
       };
     };
   };
+  # Copy VS Code settings to the user's home directory
+  home.activation.copyVscodeSettings = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    mkdir -p ~/.config/Code/User
+    cp -f ${
+      pkgs.writeText "settings.json" (
+        builtins.toJSON {
+          "editor.fontSize" = 14;
+          # ... other settings
+        }
+      )
+    } ~/.config/Code/User/settings.json
+    chmod +w ~/.config/Code/User/settings.json
+  '';
 
   #git
   programs.git = {

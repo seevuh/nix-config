@@ -241,6 +241,8 @@
     alacritty # Terminal
     neovim
     nixfmt # Nix - Official RFC-style formatter (Recommended)
+    zsh
+    git
   ];
 
   # Set Alacritty as the default terminal
@@ -284,6 +286,10 @@
 
   # Enable Git system-wide
   programs.git.enable = true;
+
+  #Enable zsh system-wide
+  programs.zsh.enable = true;
+  users.defaultUserShell = pkgs.zsh;
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
