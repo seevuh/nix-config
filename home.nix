@@ -23,7 +23,7 @@
     gnome-software # software store
     gnome-clocks # clock
     nautilus # File Manager
-    gnome-tweaks # Advanced Customization Tool
+    # gnome-tweaks # Advanced Customization Tool
     gnome-calculator # Calculator
     gnome-system-monitor # system monitor
     gnome-disk-utility # Udisks UI
@@ -33,6 +33,7 @@
     gnome-text-editor # text editor
     loupe # image viewer
     papers # document viewer
+    epiphany # browser
 
     # gnome extensions
     gnomeExtensions.gjs-osk
@@ -50,8 +51,16 @@
     # shell fix
     nix-your-shell
 
-    #fonts
+    # fonts
     nerd-fonts.jetbrains-mono
+
+    # proton
+    proton-pass
+    protonmail-desktop
+
+    # bitwarden
+    # insecure electron pkg
+    # bitwarden-desktop
 
   ];
 
@@ -285,6 +294,23 @@
         name = "personal";
         isDefault = true;
 
+        search = {
+          force = true;
+          default = "google"; # Or your preferred engine
+          engines = {
+            "Nix Packages" = {
+              urls = [ { template = "https://search.nixos.org/packages?channel=unstable&query={searchTerms}"; } ];
+              icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+              definedAliases = [ "@np" ];
+            };
+            "Nix Options" = {
+              urls = [ { template = "https://search.nixos.org/options?channel=unstable&query={searchTerms}"; } ];
+              icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+              definedAliases = [ "@no" ];
+            };
+          };
+        };
+
         settings = {
           # show bookmarks bar 0 never, 1 always, 2 on new tab
           "browser.toolbars.bookmarks.visibility" = "1";
@@ -328,10 +354,16 @@
           moz = short: "https://addons.mozilla.org/firefox/downloads/latest/${short}/latest.xpi";
         in
         {
-          # uBlock origin
-          "uBlock0@raymondhill.net" = {
-            install_url = moz "ublock-origin";
-            installation_mode = "force_installed";
+          # Improve YouTube
+          "{3c6bf0cc-3ae2-42fb-9993-0d33104fdcaf}" = {
+            install_url = moz "youtube-addon";
+            installation_mode = "normal_installed";
+          };
+
+          # bitwarden
+          "{446900e4-71c2-419f-a6a7-df9c091e268b}" = {
+            install_url = moz "bitwarden-password-manager";
+            installation_mode = "normal_installed";
           };
 
           # dark reader
@@ -346,9 +378,15 @@
             installation_mode = "normal_installed";
           };
 
-          # bitwarden
-          "{446900e4-71c2-419f-a6a7-df9c091e268b}" = {
-            install_url = moz "bitwarden-password-manager";
+          # Proton Pass
+          "78272b6fa58f4a1abaac99321d503a20@proton.me" = {
+            install_url = moz "proton-pass";
+            installation_mode = "normal_installed";
+          };
+
+          # Proton VPN
+          "vpn@proton.ch" = {
+            install_url = moz "proton-vpn-firefox-extension";
             installation_mode = "normal_installed";
           };
 
@@ -358,10 +396,10 @@
             installation_mode = "normal_installed";
           };
 
-          # Improve YouTube
-          "{3c6bf0cc-3ae2-42fb-9993-0d33104fdcaf}" = {
-            install_url = moz "youtube-addon";
-            installation_mode = "normal_installed";
+          # uBlock origin
+          "uBlock0@raymondhill.net" = {
+            install_url = moz "ublock-origin";
+            installation_mode = "force_installed";
           };
 
         };
