@@ -2,7 +2,6 @@
   config,
   pkgs,
   user,
-  lib,
   ...
 }:
 
@@ -33,7 +32,9 @@
     gnome-text-editor # text editor
     loupe # image viewer
     papers # document viewer
+
     epiphany # browser
+    brave # browser
 
     # gnome extensions
     gnomeExtensions.gjs-osk
