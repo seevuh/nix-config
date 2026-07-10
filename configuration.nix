@@ -96,12 +96,10 @@
   # Define your hostname.
   networking.hostName = "nixos";
 
-  # Enable networking
+  # Enable network manager
   networking = {
-
-    networkmanager.enable = false; # Enabling WPA instead
-
-    # static ip
+    # Disable DHCP so it doesn't overwrite your static configuration
+    useDHCP = false;
     interfaces.wlo1 = {
       ipv4.addresses = [
         {
@@ -111,23 +109,14 @@
       ];
     };
 
-    defaultGateway = {
-      address = "192.168.1.1";
-      interface = "wlo1";
-    };
-
+    defaultGateway = "192.168.1.1";
     nameservers = [
-      "1.1.1.1"
       "8.8.8.8"
+      "1.1.1.1"
     ];
 
-    wireless = {
-      enable = true; # Enables wireless support via wpa_supplicant
-      networks = {
-        "Vybe_Nest Co Space_5B_5G" = {
-          pskRaw = "a0717ae84e962d2a15d56a930d4262ed07b4b66c92ae381ce7bd0703b22b1b00";
-        };
-      };
+    networkmanager = {
+      enable = true;
     };
   };
 
