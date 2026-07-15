@@ -56,8 +56,8 @@
     nerd-fonts.jetbrains-mono
 
     # proton
-    proton-pass
-    protonmail-desktop
+    # proton-pass
+    # protonmail-desktop
 
     # bitwarden
     # insecure electron pkg
