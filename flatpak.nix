@@ -7,7 +7,6 @@ let
     "org.videolan.VLC"
     "me.proton.Pass"
     "me.proton.Mail"
-    "com.protonvpn.www"
     "com.bitwarden.desktop"
     "com.github.tchx84.Flatseal"
   ];
