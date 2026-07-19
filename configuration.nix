@@ -212,6 +212,7 @@
       "wheel"
       "video"
       "render"
+      "incus-admin" # incus
     ];
     packages = with pkgs; [
       #  thunderbird
@@ -273,6 +274,10 @@
   };
 
   # List services that you want to enable:
+
+  # Enable incus
+  virtualisation.incus.enable = true;
+  networking.nftables.enable = true;
 
   # Enable Git system-wide
   programs.git.enable = true;
