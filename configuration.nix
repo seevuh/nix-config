@@ -278,6 +278,8 @@
   # Enable incus
   virtualisation.incus.enable = true;
   networking.nftables.enable = true;
+  # Firewall settings
+  networking.firewall.trustedInterfaces = [ "incusbr0" ];
 
   # Enable Git system-wide
   programs.git.enable = true;
