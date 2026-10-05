@@ -203,6 +203,24 @@
   #   '';
   # };
 
+  # Enable Plex Media Server
+  services.plex = {
+    enable = true;
+    openFirewall = true; # Opens TCP port 32400 automatically
+    user = "${user}";
+    # dataDir = "/var/lib/plex"; # Optional: specify a custom data directory
+  };
+
+  # Enable qbittorrent
+  services.qbittorrent = {
+    enable = true;
+    user = "qbittorrent";
+    group = "qbittorrent";
+    openFirewall = true; # Opens the torrenting and WebUI ports
+    webuiPort = 8080;
+    torrentingPort = 6881;
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${user} = {
     isNormalUser = true;
@@ -259,6 +277,16 @@
     "nix-command"
     "flakes"
   ];
+
+  # Disable sleep
+  systemd.sleep.settings = {
+    Sleep = {
+      AllowSuspend = "no";
+      AllowHibernation = "no";
+      AllowHybridSleep = "no";
+      AllowSuspendThenHibernate = "no";
+    };
+  };
 
   ## Enable auto upgrade
   system.autoUpgrade = {
