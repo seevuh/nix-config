@@ -152,6 +152,7 @@
   # Nushell Configuration
   programs.nushell = {
     enable = true;
+    loadSessionVariables = true;
 
     # Set your shell environment variables
     extraEnv = ''

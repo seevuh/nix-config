@@ -112,8 +112,8 @@
 
     defaultGateway = "192.168.1.1";
     nameservers = [
-      "8.8.8.8"
       "1.1.1.1"
+      "9.9.9.9"
     ];
 
     networkmanager = {
@@ -209,6 +209,13 @@
     openFirewall = true; # Opens TCP port 32400 automatically
     user = "${user}";
     # dataDir = "/var/lib/plex"; # Optional: specify a custom data directory
+  };
+
+  # Force Plex to stop quickly on shutdown
+  systemd.services.plex.serviceConfig = {
+    KillSignal = pkgs.lib.mkForce "SIGKILL"; # Skip the gentle exit and kill instantly
+    TimeoutStopSec = 5; # Fallback timer limit in seconds
+    Restart = pkgs.lib.mkForce "no"; # Don't try to restart it while shutting down
   };
 
   # Enable qbittorrent
