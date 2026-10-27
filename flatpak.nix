@@ -5,8 +5,8 @@ let
   # 1. Declare the Flatpaks you *want* on your system
   desiredFlatpaks = [
     "org.videolan.VLC"
-    "me.proton.Pass"
-    "me.proton.Mail"
+    # "me.proton.Pass"
+    # "me.proton.Mail"
     "com.bitwarden.desktop"
     "com.github.tchx84.Flatseal"
   ];

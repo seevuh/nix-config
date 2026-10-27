@@ -259,6 +259,11 @@
     nixfmt # Nix - Official RFC-style formatter (Recommended)
     zsh
     git
+    protonvpn-gui
+    proton-pass
+    protonmail-bridge
+    wireguard-tools
+    thunderbird
   ];
 
   # Set Alacritty as the default terminal
@@ -314,7 +319,12 @@
   virtualisation.incus.enable = true;
   networking.nftables.enable = true;
   # Firewall settings
-  networking.firewall.trustedInterfaces = [ "incusbr0" ];
+  networking.firewall.trustedInterfaces = [
+    "incusbr0"
+    "enp0s20f0u2"
+    "wlo1"
+    "ap0"
+  ];
 
   # Enable Git system-wide
   programs.git.enable = true;
@@ -327,5 +337,26 @@
   # services.openssh.enable = true;
 
   system.stateVersion = "26.05"; # Did you read the comment?
+
+  # Wifi hotspot
+  networking.firewall = {
+    enable = true;
+    allowedUDPPorts = [
+      53
+      67
+      68
+    ]; # DNS (53) and DHCP (67, 68)
+    allowedTCPPorts = [
+      53
+      80
+    ]; # Optional TCP DNS if needed
+    # checkReversePath = "loose"; # Helps prevent packet drops with routed/shared interfaces
+  };
+  boot.kernel.sysctl = {
+    "net.ipv4.ip_forward" = 1;
+  };
+
+  # Proton VPN
+  networking.firewall.checkReversePath = false;
 
 }
